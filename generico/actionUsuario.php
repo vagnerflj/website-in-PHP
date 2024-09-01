@@ -17,6 +17,11 @@
             $erroPreenchimento = true; //Em caso de erro, a variável passa a ser verdadeira
         } else{
             $nomeUsuario = filtrar_entrada($_POST["nomeUsuario"]); //Caso não hajam erros, a variável PHP recebe o valor que foi preenchido no formulário
+            //Utiliza a função preg_match() para verificar se há somente letras
+            if(!preg_match('/^[\p{L} ]+$/u', $nomeUsuario)){
+                echo "<div class='alert alert-warning text-center'>O campo <strong>NOME</strong> deve conter somente LETRAS!</div>";
+                $erroPreenchimento = true; //Em caso de erro, a variável passa a ser verdadeira
+            }
         }
 
         //Validação do campo cidadeUsuario
@@ -58,16 +63,56 @@
         } else{
             $confirmarSenhaUsuario = md5(filtrar_entrada($_POST["confirmarSenhaUsuario"]));
             if($senhaUsuario != $confirmarSenhaUsuario){
-                echo "<div class='alert alert-warning text-center'>
-                As senhas informadas são<strong>DIFERENTES</strong>!</div>";
+                echo "<div class='alert alert-warning text-center'>As senhas informadas são <strong>DIFERENTES</strong>!</div>";
                 $erroPreenchimento = true;
             }
         }
 
+        //Início da validação da Foto do Usuário
+        $diretorio    = "img/"; //Define para qual diretório do sistema as imagens serão movidas
+        $fotoUsuario  = $diretorio . basename($_FILES["fotoUsuario"]["name"]); // img/ana.jpg
+        $erroUpload   = false; //Variável criada para verificar se houve sucesso no upload
+        $tipoDaImagem = strtolower(pathinfo($fotoUsuario, PATHINFO_EXTENSION));  //Pega tipo do arquivo
+
+        //Verifica se o tamanho da imagem é maior do que ZERO
+        if ($_FILES["fotoUsuario"]["size"] != 0){ //Usa a propriedade "size" para verificar o tamanho 
+
+            if($_FILES["fotoUsuario"]["size"] > 5000000){ //Verifica o tamanho em BYTES (5MB, nesse caso)
+                echo "<div class='alert alert-warning text-center'>A foto não pode ser <strong>maior</strong> do que 5MB!</div>";
+                $erroUpload = true;
+            }
+
+            //Cria o conjunto de imagens aceitos pelo campo foto do formulário 
+            if($tipoDaImagem != "jpg" && $tipoDaImagem != "jpeg" && $tipoDaImagem != "png" && $tipoDaImagem != "webp"){
+                echo "<div class='alert alert-warning text-center'>A foto precisa estar nos formatos <strong>JPG, JPEG, PNG ou WEBP</strong>!</div>";
+                $erroUpload = true;
+            }   
+
+            if($erroUpload){
+                echo "<div class='alert alert-warning text-center'>Erro ao tentar fazer o <strong>UPLOAD DA FOTO</strong>!</div>";
+                $erroUpload = true;
+            }
+            else{
+                //A função seguinte é responsável por mover o arquivo par ao diretório definido (img/)
+                if(!move_uploaded_file($_FILES["fotoUsuario"]["tmp_name"], $fotoUsuario)){
+                    echo "<div class='alert alert-warning text-center'>Erro ao tentar<strong>MOVER O ARQUIVO para o diretório $diretorio</strong>!</div>";
+                    $erroUpload = true;
+                }
+            }
+        }
+        else{
+            echo "<div class='alert alert-warning text-center'>
+            Erro ao tentar fazer o <strong>UPLOAD DA FOTO</strong>!</div>";
+            $erroUpload = true;
+        }
+        
         //Se NÃO houver erro de preenchimento (caso a variável de controle esteja com o valor 'false')
-        if(!$erroPreenchimento){
+        if(!$erroPreenchimento && !$erroUpload){
             echo "
                 <div class='container mt-3'>
+                    <div class='container mt-3 text-center'>
+                        <img src='$fotoUsuario' style='width: 150px;'>
+                    </div>
                     <div class='table-responsive'>
                         <table class='table'>
                             <tr>
