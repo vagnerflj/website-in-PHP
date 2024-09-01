@@ -101,48 +101,61 @@
             }
         }
         else{
-            echo "<div class='alert alert-warning text-center'>
-            Erro ao tentar fazer o <strong>UPLOAD DA FOTO</strong>!</div>";
+            echo "<div class='alert alert-warning text-center'>Erro ao tentar fazer o <strong>UPLOAD DA FOTO</strong>!</div>";
             $erroUpload = true;
         }
         
         //Se NÃO houver erro de preenchimento (caso a variável de controle esteja com o valor 'false')
         if(!$erroPreenchimento && !$erroUpload){
-            echo "
-                <div class='container mt-3'>
-                    <div class='container mt-3 text-center'>
-                        <img src='$fotoUsuario' style='width: 150px;'>
+
+            $inserirUsuario = "INSERT INTO Usuarios (fotoUsuario, nomeUsuario, cidadeUsuario, telefoneUsuario, emailUsuario, senhaUsuario, dataCadastroUsuario, horaCadastroUsuario)
+                                VALUES ('$fotoUsuario', '$nomeUsuario', '$cidadeUsuario', '$telefoneUsuario', '$emailUsuario', '$senhaUsuario', '$dataCadastroUsuario', '$horaCadastroUsuario')";
+
+            //Inclui o código conexaoBD.php para utilizar a conexão com a base
+            include("conexaoBD.php");
+            
+            //Utiliza a função mysqli_query para executar a query na base de dados
+            if (mysqli_query($conn, $inserirUsuario)){
+                echo "
+                    <div class='alert alert-success text-center'>Usuário cadastrado com sucesso!</div>
+                    <div class='container mt-3'>
+                        <div class='container mt-3 text-center'>
+                            <img src='$fotoUsuario' style='width: 150px;'>
+                        </div>
+                        <div class='table-responsive'>
+                            <table class='table'>
+                                <tr>
+                                    <th>NOME</th>
+                                    <td>$nomeUsuario</td>
+                                </tr>
+                                <tr>
+                                    <th>CIDADE</th>
+                                    <td>$cidadeUsuario</td>
+                                </tr>
+                                <tr>
+                                    <th>TELEFONE</th>
+                                    <td>$telefoneUsuario</td>
+                                </tr>
+                                <tr>
+                                    <th>EMAIL</th>
+                                    <td>$emailUsuario</td>
+                                </tr>
+                                <tr>
+                                    <th>SENHA</th>
+                                    <td>$senhaUsuario</td>
+                                </tr>
+                                <tr>
+                                    <th>CONFIRMAR SENHA</th>
+                                    <td>$confirmarSenhaUsuario</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class='table-responsive'>
-                        <table class='table'>
-                            <tr>
-                                <th>NOME</th>
-                                <td>$nomeUsuario</td>
-                            </tr>
-                            <tr>
-                                <th>CIDADE</th>
-                                <td>$cidadeUsuario</td>
-                            </tr>
-                            <tr>
-                                <th>TELEFONE</th>
-                                <td>$telefoneUsuario</td>
-                            </tr>
-                            <tr>
-                                <th>EMAIL</th>
-                                <td>$emailUsuario</td>
-                            </tr>
-                            <tr>
-                                <th>SENHA</th>
-                                <td>$senhaUsuario</td>
-                            </tr>
-                            <tr>
-                                <th>CONFIRMAR SENHA</th>
-                                <td>$confirmarSenhaUsuario</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            ";
+                ";
+            } //Fim do if do mysqli_query
+            else {
+                echo "<div class='alert alert-danger text-center'>Erro ao tentar cadastrar usuário!</div>" . mysqli_error($conn) . "<br>" . $inserirUsuario;
+            }
         }
 
     }
