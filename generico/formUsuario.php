@@ -10,7 +10,7 @@
 
                 <div class="col-sm-12">
 
-                    <form action="actionUsuario.php" class="was-validated" method="POST">
+                    <form action="actionUsuario.php" class="was-validated" method="POST" enctype="multipart/form-data">
 
                         <div class="form-floating mb-3 mt-3">
                             <input type="file" class="form-control" id="fotoUsuario" name="fotoUsuario" required>

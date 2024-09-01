@@ -10,7 +10,7 @@
 
                 <div class="col-sm-12">
 
-                    <form action="#actionProduto.php" class="was-validated">
+                    <form action="actionProduto.php" class="was-validated" method="POST" enctype="multipart/form-data">
 
                         <div class="form-floating mb-3 mt-3">
                             <input type="file" class="form-control" id="fotoProduto" name="fotoProduto" required>
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-floating mb-3 mt-3">
-                            <textarea class="form-control" id="descricaoProduto" placeholder="Informe uma descrição do Produto" name="telefoneProduto" required></textarea>
+                            <textarea class="form-control" id="descricaoProduto" placeholder="Informe uma descrição do Produto" name="descricaoProduto" required></textarea>
                             <label for="descricaoProduto" class="form-label">Descrição do Produto:</label>
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback"></div>
@@ -45,7 +45,7 @@
                         </div>
 
                         <div class="form-floating mb-3 mt-3">
-                            <input type="text" class="form-control" id="valorProduto" placeholder="Informe o valor do Produto" name="telefoneProduto" required>
+                            <input type="text" class="form-control" id="valorProduto" placeholder="Informe o valor do Produto" name="valorProduto" required>
                             <label for="valorProduto" class="form-label">Valor do Produto:</label>
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback"></div>
