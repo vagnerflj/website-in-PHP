@@ -90,37 +90,56 @@
         
         //Se NÃO houver erro de preenchimento (caso a variável de controle esteja com o valor 'false')
         if(!$erroPreenchimento && !$erroUpload){
-            echo "
-                <div class='container mt-3'>
-                    <div class='container mt-3 text-center'>
-                        <img src='$fotoProduto' style='width: 150px;'>
+
+            //Cria a Query para realizar a inserção das informações na tabela Produtos
+            $inserirProduto = "INSERT INTO Produtos (nomeProduto, descricaoProduto, categoriaProduto, valorProduto, condicaoProduto, dataCadastroProduto, horaCadastroProduto, statusProduto)
+                            VALUES ('$nomeProduto', '$descricaoProduto', '$categoriaProduto', $valorProduto, '$condicaoProduto', '$dataCadastroProduto', '$horaCadastroProduto', 'disponivel')"; 
+
+            //Inclui o arquivo para conexão com o Banco de Dados
+            include("conexaoBD.php");
+
+            //Utiliza a função mysqli_query para executar a QUERY no Banco de Dados
+            if(mysqli_query($conn, $inserirProduto)){
+
+                echo "
+                    <div class='alert alert-success text-center'>Produto cadastrado com sucesso!</div>
+                    <div class='container mt-3'>
+                        <div class='container mt-3 text-center'>
+                            <img src='$fotoProduto' style='width: 150px;'>
+                        </div>
+                        <div class='table-responsive'>
+                            <table class='table'>
+                                <tr>
+                                    <th>NOME</th>
+                                    <td>$nomeProduto</td>
+                                </tr>
+                                <tr>
+                                    <th>DESCRIÇÃO</th>
+                                    <td>$descricaoProduto</td>
+                                </tr>
+                                <tr>
+                                    <th>CATEGORIA</th>
+                                    <td>$categoriaProduto</td>
+                                </tr>
+                                <tr>
+                                    <th>VALOR DO PRODUTO</th>
+                                    <td>$valorProduto</td>
+                                </tr>
+                                <tr>
+                                    <th>CONDIÇÃO</th>
+                                    <td>$condicaoProduto</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class='table-responsive'>
-                        <table class='table'>
-                            <tr>
-                                <th>NOME</th>
-                                <td>$nomeProduto</td>
-                            </tr>
-                            <tr>
-                                <th>DESCRIÇÃO</th>
-                                <td>$descricaoProduto</td>
-                            </tr>
-                            <tr>
-                                <th>CATEGORIA</th>
-                                <td>$categoriaProduto</td>
-                            </tr>
-                            <tr>
-                                <th>VALOR DO PRODUTO</th>
-                                <td>$valorProduto</td>
-                            </tr>
-                            <tr>
-                                <th>CONDIÇÃO</th>
-                                <td>$condicaoProduto</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            ";
+                ";
+            }
+            else{
+                echo "<div class='alert alert-danger text-center'>
+                            Erro ao tentar cadastrar produto!
+                    </div>" . mysqli_error($conn);
+                echo "<p>$inserirProduto</p>";
+            }
         }
 
     }
