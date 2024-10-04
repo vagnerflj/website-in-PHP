@@ -56,7 +56,8 @@ if ($conn->connect_error) {
 ?>
 ```
 ## Ação de Cadastro de Usuario
-```
+
+```php
 <?php
 // actionUsuario.php
 include 'conexaoBD.php';
@@ -79,7 +80,7 @@ $conn->close();
 ```
 ## Como Executar
 
-```
+```php
 ## 1. Clone o repositório:
 
 git clone https://github.com/vagnerflj/website-in-PHP.git
